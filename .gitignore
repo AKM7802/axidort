@@ -1,0 +1,42 @@
+# Secrets — real values live only in .env (never commit); .env.example is
+# the tracked template.
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenv
+venv/
+.venv/
+env/
+ENV/
+
+# Test / lint / type-checker caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Frontend (apps/web/ has its own .gitignore for node_modules, .next, etc.
+# — these are a backstop in case anything is ever added outside that tree)
+node_modules/
+.next/
+out/
+*.tsbuildinfo
