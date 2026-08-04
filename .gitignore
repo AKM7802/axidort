@@ -34,7 +34,7 @@ Thumbs.db
 # Logs
 *.log
 
-# Frontend (apps/web/ has its own .gitignore for node_modules, .next, etc.
+# Frontend (frontend/ has its own .gitignore for node_modules, .next, etc.
 # — these are a backstop in case anything is ever added outside that tree)
 node_modules/
 .next/
