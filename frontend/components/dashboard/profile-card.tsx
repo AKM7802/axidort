@@ -1,11 +1,11 @@
 import { Mail, MapPin, Tag, User } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { StatusBadge } from "@/components/dashboard/status-badge";
+import { Panel } from "@/components/dashboard/panel";
 import { territoryLabel } from "@/lib/geo";
 import type { ClientProfile } from "@/lib/types";
+
+const TAG_CLASS = "eyebrow inline-flex items-center border px-1.5 py-0.5";
 
 export function ProfileCard({
   client,
@@ -15,29 +15,21 @@ export function ProfileCard({
   cityNames: Record<string, string>;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-lg">Account</CardTitle>
-          <StatusBadge status={client.status} />
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+    <Panel title="Account" action={<StatusBadge status={client.status} />} bodyClassName="p-0">
+      <div className="grid grid-cols-1 divide-y divide-foreground/15 md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div className="flex flex-col gap-3 p-5 text-sm">
           <div className="flex items-center gap-2">
             <User className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span>{client.contact_name}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span className="truncate">{client.email}</span>
           </div>
         </div>
 
-        <Separator />
-
-        <div>
-          <div className="mb-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+        <div className="p-5">
+          <div className="mb-3 flex items-center gap-1.5 text-sm text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" />
             Territories
           </div>
@@ -46,16 +38,16 @@ export function ProfileCard({
           ) : (
             <div className="flex flex-wrap gap-1.5">
               {client.territories.map((t) => (
-                <Badge key={t.id} variant="outline">
+                <span key={t.id} className={`${TAG_CLASS} border-foreground/30`}>
                   {territoryLabel(t.kind, t.value, cityNames)}
-                </Badge>
+                </span>
               ))}
             </div>
           )}
         </div>
 
-        <div>
-          <div className="mb-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+        <div className="p-5">
+          <div className="mb-3 flex items-center gap-1.5 text-sm text-muted-foreground">
             <Tag className="h-3.5 w-3.5" />
             Category subscriptions
           </div>
@@ -64,14 +56,14 @@ export function ProfileCard({
           ) : (
             <div className="flex flex-wrap gap-1.5">
               {client.category_subscriptions.map((c) => (
-                <Badge key={c.category} variant="secondary">
+                <span key={c.category} className={`${TAG_CLASS} border-transparent bg-secondary`}>
                   {c.category}
-                </Badge>
+                </span>
               ))}
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </Panel>
   );
 }

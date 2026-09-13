@@ -10,7 +10,7 @@ export function LogoMark({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground",
+        "flex shrink-0 items-center justify-center rounded-sm bg-foreground text-background",
         className,
       )}
     >
@@ -23,15 +23,15 @@ export function LogoMark({ className }: { className?: string }) {
           strokeLinejoin="round"
         />
         <path d="M8 13.6h8" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
-        <circle cx="12" cy="3.4" r="1.15" fill="currentColor" />
+        <circle cx="12" cy="3.4" r="1.25" className="fill-primary" />
       </svg>
     </span>
   );
 }
 
 const SIZE_STYLES = {
-  sm: { link: "text-sm", mark: "size-6 rounded-md" },
-  md: { link: "text-base", mark: "size-7 rounded-lg" },
+  sm: { link: "text-sm", mark: "size-6" },
+  md: { link: "text-base", mark: "size-7" },
 } as const;
 
 export function Logo({
@@ -48,7 +48,7 @@ export function Logo({
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-2 font-heading font-semibold tracking-tight",
+        "flex items-center gap-2 font-heading font-bold tracking-tight [font-stretch:92%]",
         styles.link,
         className,
       )}

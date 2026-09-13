@@ -7,10 +7,9 @@ import { toast } from "sonner";
 
 import { api, apiErrorMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Logo } from "@/components/logo";
+import { AuthShell } from "@/components/auth-shell";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -43,61 +42,55 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-6 py-16">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <Logo size="sm" className="mb-2" />
-          <CardTitle className="text-xl">Set a new password</CardTitle>
-          <CardDescription>Choose a new password for your account.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!token ? (
-            <div className="flex flex-col gap-4">
-              <p className="text-sm text-muted-foreground">
-                This reset link is missing or malformed. Request a new one to continue.
-              </p>
-              <Button className="w-full" nativeButton={false} render={<Link href="/forgot-password" />}>
-                Request a new link
-              </Button>
-            </div>
-          ) : (
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="password">New password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-              </div>
+    <AuthShell
+      title="Set a new password"
+      description="Choose a new password for your account."
+    >
+      {!token ? (
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-muted-foreground">
+            This reset link is missing or malformed. Request a new one to continue.
+          </p>
+          <Button className="h-10 w-full rounded-sm" nativeButton={false} render={<Link href="/forgot-password" />}>
+            Request a new link
+          </Button>
+        </div>
+      ) : (
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="password">New password</Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
+          </div>
 
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="confirm-password">Confirm new password</Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-              </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="confirm-password">Confirm new password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="••••••••"
+            />
+          </div>
 
-              <Button type="submit" className="mt-2 w-full" disabled={submitting}>
-                {submitting ? "Updating…" : "Update password"}
-              </Button>
-            </form>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+          <Button type="submit" className="mt-2 h-10 w-full rounded-sm hover:bg-foreground hover:text-background" disabled={submitting}>
+            {submitting ? "Updating…" : "Update password"}
+          </Button>
+        </form>
+      )}
+    </AuthShell>
   );
 }
 

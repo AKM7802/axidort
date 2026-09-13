@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -8,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EmptyState } from "@/components/dashboard/panel";
 import type { Lead } from "@/lib/types";
 
 function formatDate(value: string | null): string {
@@ -31,11 +31,13 @@ function uniqueCategories(lead: Lead): string[] {
   return Array.from(seen);
 }
 
+const TAG_CLASS = "eyebrow inline-flex items-center border px-1.5 py-0.5";
+
 function LeadsTableSkeleton() {
   return (
     <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }).map((_, i) => (
-        <Skeleton key={i} className="h-10 w-full" />
+        <Skeleton key={i} className="h-10 w-full rounded-none" />
       ))}
     </div>
   );
@@ -56,17 +58,14 @@ export function LeadsTable({
 
   if (leads.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed py-16 text-center">
-        <p className="text-sm font-medium">No leads yet</p>
-        <p className="text-sm text-muted-foreground">Check back soon.</p>
-      </div>
+      <EmptyState className="py-16" title="No leads yet" description="Check back soon." />
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border">
+    <div className="overflow-hidden border border-foreground/15">
       <Table>
-        <TableHeader className="bg-muted/50">
+        <TableHeader className="bg-secondary/70 [&_th]:eyebrow [&_th]:h-9 [&_th]:px-3 [&_th]:text-muted-foreground">
           <TableRow className="hover:bg-transparent">
             <TableHead>Business</TableHead>
             <TableHead>Inspection Date</TableHead>
@@ -82,17 +81,17 @@ export function LeadsTable({
             const locationParts = [event.address_line, event.municipality].filter(Boolean);
             return (
               <TableRow key={lead.id}>
-                <TableCell className="whitespace-normal">
+                <TableCell className="px-3 py-3 whitespace-normal">
                   <div className="font-medium">{event.business_name}</div>
                   {locationParts.length > 0 && (
                     <div className="text-xs text-muted-foreground">{locationParts.join(", ")}</div>
                   )}
                 </TableCell>
-                <TableCell className="whitespace-nowrap text-muted-foreground">
+                <TableCell className="px-3 font-mono text-xs whitespace-nowrap text-muted-foreground">
                   {formatDate(event.inspection_date)}
                 </TableCell>
-                <TableCell className="whitespace-nowrap">{event.result ?? "—"}</TableCell>
-                <TableCell className="whitespace-normal">
+                <TableCell className="px-3 whitespace-nowrap">{event.result ?? "—"}</TableCell>
+                <TableCell className="px-3 whitespace-normal">
                   <div className="flex flex-wrap gap-1">
                     {uniqueCategories(lead).length === 0 ? (
                       <span className="text-muted-foreground">—</span>
@@ -100,30 +99,29 @@ export function LeadsTable({
                       uniqueCategories(lead).map((category) => {
                         const isSubscribed = subscribedCategories.has(category);
                         return isSubscribed ? (
-                          <Badge key={category} variant="secondary">
+                          <span key={category} className={`${TAG_CLASS} border-transparent bg-secondary`}>
                             {category}
-                          </Badge>
+                          </span>
                         ) : (
-                          <Badge
+                          <span
                             key={category}
-                            variant="outline"
-                            className="border-dashed text-muted-foreground/70"
+                            className={`${TAG_CLASS} border-dashed border-foreground/30 text-muted-foreground/80`}
                             title="Also cited on this inspection, outside your subscribed categories"
                           >
                             {category}
-                          </Badge>
+                          </span>
                         );
                       })
                     )}
                   </div>
                 </TableCell>
                 <TableCell
-                  className="max-w-xs truncate whitespace-normal text-muted-foreground"
+                  className="max-w-xs truncate px-3 whitespace-normal text-muted-foreground"
                   title={event.narration ?? undefined}
                 >
                   {truncate(event.narration, 120)}
                 </TableCell>
-                <TableCell className="whitespace-nowrap text-muted-foreground">
+                <TableCell className="px-3 font-mono text-xs whitespace-nowrap text-muted-foreground">
                   {formatDate(lead.matched_at)}
                 </TableCell>
               </TableRow>

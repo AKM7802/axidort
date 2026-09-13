@@ -2,7 +2,6 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -10,6 +9,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState, Panel } from "@/components/dashboard/panel";
 import type { WeeklyCount } from "@/lib/types";
 
 function formatWeekLabel(iso: string): string {
@@ -34,43 +34,42 @@ export function LeadsOverTimeChart({
   loading: boolean;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Leads over time</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <Skeleton className="h-64 w-full" />
-        ) : data.length < 2 ? (
-          <div className="flex h-64 w-full flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-center">
-            <p className="text-sm font-medium">Not enough data yet</p>
-            <p className="text-sm text-muted-foreground">Check back after a few weeks of leads.</p>
-          </div>
-        ) : (
-          <ChartContainer config={chartConfig} className="aspect-auto h-64 w-full">
-            <BarChart data={data} margin={{ left: 0, right: 8 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="week_start"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={formatWeekLabel}
-              />
-              <YAxis tickLine={false} axisLine={false} tickMargin={8} width={32} allowDecimals={false} />
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => formatWeekLabel(String(value))}
-                  />
-                }
-              />
-              <Bar dataKey="count" fill="var(--color-count)" radius={[4, 4, 0, 0]} maxBarSize={48} />
-            </BarChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
+    <Panel title="Leads over time" className="h-full">
+      {loading ? (
+        <Skeleton className="h-64 w-full rounded-none" />
+      ) : data.length < 2 ? (
+        <EmptyState
+          className="h-64"
+          title="Not enough data yet"
+          description="Check back after a few weeks of leads."
+        />
+      ) : (
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-64 w-full font-mono [&_.recharts-cartesian-axis-tick_text]:text-[11px]"
+        >
+          <BarChart data={data} margin={{ left: 0, right: 8 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis
+              dataKey="week_start"
+              tickLine={false}
+              axisLine={{ stroke: "var(--foreground)", strokeOpacity: 0.6 }}
+              tickMargin={8}
+              tickFormatter={formatWeekLabel}
+            />
+            <YAxis tickLine={false} axisLine={false} tickMargin={8} width={32} allowDecimals={false} />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => formatWeekLabel(String(value))}
+                />
+              }
+            />
+            <Bar dataKey="count" fill="var(--color-count)" radius={[1, 1, 0, 0]} maxBarSize={40} />
+          </BarChart>
+        </ChartContainer>
+      )}
+    </Panel>
   );
 }

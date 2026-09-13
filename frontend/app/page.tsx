@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   ArrowRightIcon,
@@ -7,7 +8,6 @@ import {
   SparklesIcon,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AdvantageSection } from "@/components/marketing/advantage-section";
 import { ContactDialog } from "@/components/marketing/contact-dialog";
@@ -15,6 +15,7 @@ import { FeatureCard } from "@/components/marketing/feature-card";
 import { HeroPreview } from "@/components/marketing/hero-preview";
 import { PricingCard } from "@/components/marketing/pricing-card";
 import { ProblemSection } from "@/components/marketing/problem-section";
+import { SectionIndex, SplitHeading } from "@/components/marketing/section-heading";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { StepCard } from "@/components/marketing/step-card";
@@ -29,7 +30,7 @@ const FEATURES = [
     description:
       "We continuously watch for signals that a business needs your exact service — the moment one appears, it's in your queue. No chasing leads that already got fixed months ago.",
     highlighted: true,
-    className: "sm:col-span-2",
+    className: "lg:col-span-2",
   },
   {
     icon: SparklesIcon,
@@ -48,7 +49,7 @@ const FEATURES = [
     title: "Weekly leads + CSV, ready to work",
     description:
       "A clean weekly email of new leads, plus a one-click CSV export that drops straight into your CRM — no dashboard required.",
-    className: "sm:col-span-2",
+    className: "lg:col-span-2",
   },
 ];
 
@@ -110,6 +111,13 @@ const ORGANIZATION_JSON_LD = {
   description: BRAND_TAGLINE,
 };
 
+/** Stagger step for the hero's one-time entrance animation. */
+const stagger = (i: number) => ({ "--i": i }) as CSSProperties;
+
+const PRIMARY_CTA = "h-12 rounded-sm px-6 text-base hover:bg-foreground hover:text-background";
+const SECONDARY_CTA =
+  "h-12 rounded-sm border-foreground/80 bg-transparent px-6 text-base hover:bg-foreground hover:text-background";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
@@ -121,50 +129,52 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[36rem] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,var(--color-primary)/18%,transparent)]"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-0 -z-10 size-[36rem] -translate-x-[70%] -translate-y-1/3 rounded-full bg-primary/20 blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute right-1/2 top-0 -z-10 size-[28rem] translate-x-[70%] -translate-y-1/4 rounded-full bg-primary/10 blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]"
-          />
-          <div className="mx-auto grid w-full max-w-6xl gap-16 px-6 py-24 lg:grid-cols-2 lg:items-center lg:py-32">
-            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-              <Badge variant="secondary" className="mb-6">
+        <section className="border-b border-foreground/10">
+          <div className="mx-auto grid w-full max-w-7xl gap-16 px-6 pt-14 pb-20 sm:pt-20 lg:grid-cols-12 lg:gap-10 lg:pt-24 lg:pb-28">
+            <div className="lg:col-span-7">
+              <p className="reveal eyebrow flex items-center gap-2.5 text-foreground" style={stagger(0)}>
+                <span aria-hidden className="relative flex size-2">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-70" />
+                  <span className="relative size-2 rounded-full bg-primary" />
+                </span>
                 Now live in Chicago — more markets coming
-              </Badge>
-              <h1 className="text-balance font-heading text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              </p>
+              <h1
+                className="reveal headline mt-8 text-5xl text-balance sm:text-6xl lg:text-[5rem] lg:leading-[0.95]"
+                style={stagger(1)}
+              >
                 Reach businesses at the exact moment they need you
               </h1>
-              <p className="mt-6 max-w-xl text-balance text-lg text-muted-foreground">
+              <p className="reveal mt-8 max-w-xl text-lg leading-relaxed text-foreground/80" style={stagger(2)}>
                 {BRAND_NAME} continuously detects real, verifiable signals that a business needs your service
                 right now — then puts them in your inbox within days, while the window to act is still open.
               </p>
-              <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+              <p
+                className="reveal mt-5 max-w-xl border-l-2 border-primary pl-4 text-sm leading-relaxed text-muted-foreground"
+                style={stagger(3)}
+              >
                 Covering pest, sanitation, equipment, plumbing, and temperature issues in Chicago today — more
                 categories and cities on the way.
               </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" className="h-11 px-6 text-base" nativeButton={false} render={<Link href="/login" />}>
+              <div className="reveal mt-10 flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
+                <Button size="lg" className={PRIMARY_CTA} nativeButton={false} render={<Link href="/login" />}>
                   Log in
                   <ArrowRightIcon />
                 </Button>
-                <Button size="lg" variant="outline" className="h-11 px-6 text-base" nativeButton={false} render={<Link href="#pricing" />}>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className={SECONDARY_CTA}
+                  nativeButton={false}
+                  render={<Link href="#pricing" />}
+                >
                   View pricing
                 </Button>
               </div>
             </div>
-            <HeroPreview />
+            <div className="reveal lg:col-span-5 lg:pt-12" style={stagger(3)}>
+              <HeroPreview />
+            </div>
           </div>
         </section>
 
@@ -175,43 +185,32 @@ export default function Home() {
         <AdvantageSection />
 
         {/* How it works */}
-        <section id="how-it-works" className="border-t border-border/60 py-24">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">How it works</h2>
-              <p className="mt-4 text-muted-foreground">
-                Three steps between getting in touch and your first batch of leads.
-              </p>
-            </div>
-            <div className="relative mt-14 grid gap-6 md:grid-cols-3">
-              <div
-                aria-hidden
-                className="absolute top-8 right-0 left-0 hidden h-px bg-border/60 md:block"
-                style={{ marginInline: "16.66%" }}
-              />
+        <section id="how-it-works" className="scroll-mt-14 border-b border-foreground/10">
+          <div className="mx-auto w-full max-w-7xl px-6 py-24 lg:py-32">
+            <SplitHeading index={3} title="How it works">
+              <p>Three steps between getting in touch and your first batch of leads.</p>
+            </SplitHeading>
+            <ol className="mt-16 grid gap-12 md:grid-cols-3 md:gap-0">
               {STEPS.map((step, i) => (
                 <StepCard key={step.title} step={i + 1} {...step} />
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
         {/* Features */}
-        <section id="features" className="border-t border-border/60 bg-muted/30 py-24">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <Badge variant="outline" className="mb-4">
-                Built for pest, cleaning, repair & other service businesses
-              </Badge>
-              <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-                Everything you need to prospect on autopilot
-              </h2>
-              <p className="mt-4 text-muted-foreground">
+        <section id="features" className="scroll-mt-14 border-b border-foreground/10">
+          <div className="mx-auto w-full max-w-7xl px-6 py-24 lg:py-32">
+            <SplitHeading index={4} title="Everything you need to prospect on autopilot">
+              <p className="eyebrow mb-4 text-foreground">
+                Built for pest, cleaning, repair &amp; other service businesses
+              </p>
+              <p>
                 No more manually digging for scraps of evidence. We do the detection, the writeup, and the
                 delivery — you do the selling.
               </p>
-            </div>
-            <div className="mt-14 grid gap-4 sm:grid-cols-2">
+            </SplitHeading>
+            <div className="mt-16 grid gap-px border border-foreground/15 bg-foreground/15 sm:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map((feature) => (
                 <FeatureCard key={feature.title} {...feature} />
               ))}
@@ -223,17 +222,16 @@ export default function Home() {
         <TimelyDataSection />
 
         {/* Pricing */}
-        <section id="pricing" className="border-t border-border/60 bg-muted/30 py-24">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-                Simple, straightforward pricing
-              </h2>
-              <p className="mt-4 text-muted-foreground">
+        <section id="pricing" className="scroll-mt-14 border-b border-foreground/10">
+          <div className="mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 lg:grid-cols-12 lg:gap-10 lg:py-32">
+            <div className="lg:col-span-4">
+              <SectionIndex index={6} />
+              <h2 className="headline mt-5 text-4xl text-balance sm:text-5xl">Simple, straightforward pricing</h2>
+              <p className="mt-6 max-w-sm leading-relaxed text-muted-foreground">
                 Get weekly leads to your inbox, or talk to us about a custom Enterprise setup.
               </p>
             </div>
-            <div className="mx-auto mt-14 grid max-w-3xl gap-6 sm:grid-cols-2">
+            <div className="grid divide-y divide-foreground border border-foreground sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:col-span-8">
               {PLANS.map((plan) => (
                 <PricingCard key={plan.name} {...plan} />
               ))}
@@ -242,23 +240,25 @@ export default function Home() {
         </section>
 
         {/* Final CTA */}
-        <section className="border-t border-border/60 py-24">
-          <div className="mx-auto flex w-full max-w-3xl flex-col items-center px-6 text-center">
-            <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+        <section>
+          <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 py-24 lg:grid-cols-12 lg:items-end lg:py-32">
+            <h2 className="headline text-5xl text-balance sm:text-6xl lg:col-span-8 lg:text-7xl">
               Ready to stop cold-prospecting blind?
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              Tell us about your business — your first batch of leads can be in your inbox this week.
-            </p>
-            <ContactDialog
-              source="Landing page CTA button"
-              trigger={
-                <Button size="lg" className="mt-8 h-11 px-6 text-base">
-                  Get in touch
-                  <ArrowRightIcon />
-                </Button>
-              }
-            />
+            <div className="lg:col-span-4">
+              <p className="leading-relaxed text-muted-foreground">
+                Tell us about your business — your first batch of leads can be in your inbox this week.
+              </p>
+              <ContactDialog
+                source="Landing page CTA button"
+                trigger={
+                  <Button size="lg" className={`mt-6 ${PRIMARY_CTA}`}>
+                    Get in touch
+                    <ArrowRightIcon />
+                  </Button>
+                }
+              />
+            </div>
           </div>
         </section>
       </main>

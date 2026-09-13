@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { Panel } from "@/components/dashboard/panel";
 import { ProfileCard } from "@/components/dashboard/profile-card";
 import { LeadsTable } from "@/components/dashboard/leads-table";
 import { LeadsPagination } from "@/components/dashboard/leads-pagination";
@@ -23,22 +23,18 @@ const LEADS_LIMIT = 25;
 
 function DashboardSkeleton() {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6">
-      <div className="flex items-center justify-between border-b py-5">
-        <Skeleton className="h-6 w-40" />
-        <Skeleton className="h-8 w-20" />
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6">
+      <div className="flex items-end justify-between border-b-2 border-foreground pb-5">
+        <Skeleton className="h-10 w-56 rounded-none" />
+        <Skeleton className="h-8 w-20 rounded-none" />
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-24 w-full" />
-        ))}
+      <Skeleton className="h-28 w-full rounded-none" />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <Skeleton className="h-80 w-full rounded-none lg:col-span-2" />
+        <Skeleton className="h-80 w-full rounded-none" />
       </div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Skeleton className="h-64 w-full lg:col-span-2" />
-        <Skeleton className="h-64 w-full" />
-      </div>
-      <Skeleton className="h-64 w-full" />
-      <Skeleton className="h-64 w-full" />
+      <Skeleton className="h-40 w-full rounded-none" />
+      <Skeleton className="h-64 w-full rounded-none" />
     </div>
   );
 }
@@ -134,12 +130,12 @@ export default function DashboardPage() {
   const subscribedCategories = new Set(client.category_subscriptions.map((s) => s.category));
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6">
       <DashboardHeader companyName={client.company_name} onLogout={handleLogout} />
 
       <StatsCards stats={stats} loading={statsLoading} />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <LeadsOverTimeChart data={stats?.by_week ?? []} loading={statsLoading} />
         </div>
@@ -150,28 +146,23 @@ export default function DashboardPage() {
 
       <ProfileCard client={client} cityNames={cityNames} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Leads</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <LeadsTable
-            leads={leads?.items ?? []}
-            loading={leadsLoading}
-            subscribedCategories={subscribedCategories}
+      <Panel title="Your Leads" bodyClassName="flex flex-col gap-4">
+        <LeadsTable
+          leads={leads?.items ?? []}
+          loading={leadsLoading}
+          subscribedCategories={subscribedCategories}
+        />
+        {leads && (
+          <LeadsPagination
+            total={leads.total}
+            limit={LEADS_LIMIT}
+            offset={offset}
+            disabled={leadsLoading}
+            onPrevious={() => setOffset((o) => Math.max(0, o - LEADS_LIMIT))}
+            onNext={() => setOffset((o) => o + LEADS_LIMIT)}
           />
-          {leads && (
-            <LeadsPagination
-              total={leads.total}
-              limit={LEADS_LIMIT}
-              offset={offset}
-              disabled={leadsLoading}
-              onPrevious={() => setOffset((o) => Math.max(0, o - LEADS_LIMIT))}
-              onNext={() => setOffset((o) => o + LEADS_LIMIT)}
-            />
-          )}
-        </CardContent>
-      </Card>
+        )}
+      </Panel>
 
       {token && <ReportsSection token={token} subscribedCategories={subscribedCategories} />}
     </div>

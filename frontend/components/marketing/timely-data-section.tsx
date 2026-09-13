@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
 import { BRAND_NAME } from "@/lib/brand";
 import { ExampleLeadCard } from "@/components/marketing/example-lead-card";
+import { SplitHeading } from "@/components/marketing/section-heading";
 
 const EXAMPLE_LEADS = [
   {
@@ -31,22 +31,19 @@ const EXAMPLE_LEADS = [
 
 export function TimelyDataSection() {
   return (
-    <section className="border-t border-border/60 py-24">
-      <div className="mx-auto w-full max-w-7xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-            Why timing matters
-          </h2>
-          <p className="mt-4 text-muted-foreground">
+    <section className="border-b border-foreground/10 bg-secondary/60">
+      <div className="mx-auto w-full max-w-7xl px-6 py-24 lg:py-32">
+        <SplitHeading index={5} title="Why timing matters">
+          <p>
             An issue from six months ago is old news to everyone, including your prospect. An issue from a few
             days ago is still the first thing on their mind — and exactly when outreach converts best. That&apos;s
             the gap {BRAND_NAME} is built to close.
           </p>
-          <Badge variant="outline" className="mt-4 text-muted-foreground">
+          <p className="eyebrow mt-5 inline-block border border-dashed border-foreground/40 px-2 py-1 text-muted-foreground">
             Illustrative examples — not live data
-          </Badge>
-        </div>
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          </p>
+        </SplitHeading>
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
           {EXAMPLE_LEADS.map((lead) => (
             <ExampleLeadCard key={lead.businessName} {...lead} />
           ))}

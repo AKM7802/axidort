@@ -1,7 +1,3 @@
-import type { LucideIcon } from "lucide-react";
-import { Award, CalendarClock, TrendingUp } from "lucide-react";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MeStats } from "@/lib/types";
 
@@ -15,54 +11,30 @@ function capitalize(value: string): string {
   return value.length === 0 ? value : value[0].toUpperCase() + value.slice(1);
 }
 
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-  accentClassName,
-}: {
-  label: string;
-  value: string;
-  icon: LucideIcon;
-  accentClassName: string;
-}) {
-  return (
-    <Card>
-      <CardContent className="flex items-center gap-4">
-        <div
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${accentClassName}`}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate text-2xl font-semibold tabular-nums">{value}</span>
-          <span className="text-sm text-muted-foreground">{label}</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+const STRIP_CLASS =
+  "grid grid-cols-1 divide-y divide-foreground/15 border border-foreground/15 bg-card sm:grid-cols-3 sm:divide-x sm:divide-y-0";
 
-function StatCardSkeleton() {
+function StatCell({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
-    <Card>
-      <CardContent className="flex items-center gap-4">
-        <Skeleton className="h-11 w-11 shrink-0 rounded-lg" />
-        <div className="flex flex-1 flex-col gap-2">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-4 w-24" />
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex min-w-0 flex-col gap-4 px-5 py-5">
+      <span className="eyebrow flex items-center gap-2 text-muted-foreground">
+        {accent && <span aria-hidden className="size-1.5 bg-primary" />}
+        {label}
+      </span>
+      <span className="headline truncate text-4xl tabular-nums sm:text-5xl">{value}</span>
+    </div>
   );
 }
 
 export function StatsCards({ stats, loading }: { stats: MeStats | null; loading: boolean }) {
   if (loading || !stats) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className={STRIP_CLASS}>
         {Array.from({ length: 3 }).map((_, i) => (
-          <StatCardSkeleton key={i} />
+          <div key={i} className="flex flex-col gap-4 px-5 py-5">
+            <Skeleton className="h-4 w-24 rounded-none" />
+            <Skeleton className="h-10 w-20 rounded-none" />
+          </div>
         ))}
       </div>
     );
@@ -71,25 +43,10 @@ export function StatsCards({ stats, loading }: { stats: MeStats | null; loading:
   const top = topCategory(stats);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <StatCard
-        label="Total leads"
-        value={stats.total_leads.toLocaleString()}
-        icon={TrendingUp}
-        accentClassName="bg-chart-1/10 text-chart-1"
-      />
-      <StatCard
-        label="Leads this week"
-        value={stats.leads_last_7_days.toLocaleString()}
-        icon={CalendarClock}
-        accentClassName="bg-chart-2/10 text-chart-2"
-      />
-      <StatCard
-        label="Top category"
-        value={top ? capitalize(top) : "—"}
-        icon={Award}
-        accentClassName="bg-chart-4/10 text-chart-4"
-      />
+    <div className={STRIP_CLASS}>
+      <StatCell label="Total leads" value={stats.total_leads.toLocaleString()} />
+      <StatCell label="Leads this week" value={stats.leads_last_7_days.toLocaleString()} accent />
+      <StatCell label="Top category" value={top ? capitalize(top) : "—"} />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default async function OpengraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0b0a1f",
+          background: "#f5f2ea",
           fontFamily: "sans-serif",
         }}
       >
@@ -28,25 +28,25 @@ export default async function OpengraphImage() {
               justifyContent: "center",
               width: 96,
               height: 96,
-              borderRadius: 24,
-              background: "#4338ca",
+              borderRadius: 10,
+              background: "#23201c",
             }}
           >
             <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
               <path
                 d="M4.5 18.5 11.3 5.8a.8.8 0 0 1 1.4 0l6.8 12.7"
-                stroke="#ffffff"
+                stroke="#f6f3ec"
                 strokeWidth="2.3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              <path d="M8 13.6h8" stroke="#ffffff" strokeWidth="2.3" strokeLinecap="round" />
-              <circle cx="12" cy="3.4" r="1.3" fill="#ffffff" />
+              <path d="M8 13.6h8" stroke="#f6f3ec" strokeWidth="2.3" strokeLinecap="round" />
+              <circle cx="12" cy="3.4" r="1.5" fill="#ec6b25" />
             </svg>
           </div>
-          <div style={{ display: "flex", fontSize: 88, fontWeight: 700, color: "#ffffff" }}>{BRAND_NAME}</div>
+          <div style={{ display: "flex", fontSize: 88, fontWeight: 700, color: "#23201c", letterSpacing: -3 }}>{BRAND_NAME}</div>
         </div>
-        <div style={{ display: "flex", marginTop: 28, fontSize: 34, color: "#c7c5f5" }}>{BRAND_TAGLINE}</div>
+        <div style={{ display: "flex", marginTop: 28, fontSize: 34, color: "#6b645c" }}>{BRAND_TAGLINE}</div>
       </div>
     ),
     { ...size },

@@ -1,7 +1,3 @@
-import { CircleIcon } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
-
 const PREVIEW_LEADS = [
   {
     name: "Example: Riverside Diner",
@@ -25,35 +21,37 @@ const PREVIEW_LEADS = [
 
 /** A stylized preview of what a client's inbox looks like — deliberately
  * illustrative (no real data), used purely so the hero shows the product's
- * output instead of describing it in the abstract. */
+ * output instead of describing it in the abstract. Styled as a printed
+ * digest sheet rather than a fake app window. */
 export function HeroPreview() {
   return (
-    <div className="mx-auto w-full max-w-lg rounded-2xl border border-border/60 bg-card shadow-2xl shadow-primary/10">
-      <div className="flex items-center gap-1.5 rounded-t-2xl border-b border-border/60 bg-muted/40 px-4 py-3">
-        <span className="size-2.5 rounded-full bg-destructive/40" />
-        <span className="size-2.5 rounded-full bg-primary/40" />
-        <span className="size-2.5 rounded-full bg-chart-5/50" />
-        <span className="ml-2 text-xs text-muted-foreground">3 new leads this week</span>
-      </div>
-      <div className="flex flex-col gap-3 p-4">
-        {PREVIEW_LEADS.map((lead) => (
-          <div
-            key={lead.name}
-            className="flex items-start justify-between gap-3 rounded-xl border border-border/60 bg-background/60 p-3"
-          >
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <CircleIcon className="size-1.5 shrink-0 fill-primary text-primary" />
-                <p className="truncate text-sm font-medium">{lead.name}</p>
+    <div className="relative mx-auto w-full max-w-lg">
+      {/* Offset sheet behind, like a stack of printed reports */}
+      <div aria-hidden className="absolute inset-0 translate-x-3 translate-y-3 border border-foreground/15 bg-muted" />
+      <div className="relative border border-foreground/80 bg-card">
+        <div className="flex items-center justify-between border-b border-foreground/80 px-5 py-3">
+          <span className="eyebrow font-medium text-foreground">3 new leads this week</span>
+          <span aria-hidden className="flex items-center gap-1.5">
+            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="size-1.5 rounded-full bg-foreground/20" />
+            <span className="size-1.5 rounded-full bg-foreground/20" />
+          </span>
+        </div>
+        <ol className="divide-y divide-dashed divide-foreground/20">
+          {PREVIEW_LEADS.map((lead, i) => (
+            <li key={lead.name} className="grid grid-cols-[auto_1fr_auto] gap-x-4 px-5 py-4">
+              <span className="eyebrow pt-0.5 text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+              <div className="min-w-0">
+                <p className="truncate font-medium">{lead.name}</p>
+                <p className="mt-1 truncate text-sm text-muted-foreground">{lead.snippet}</p>
+                <span className="eyebrow mt-2.5 inline-block border border-foreground/25 px-1.5 py-0.5 text-foreground/80">
+                  {lead.category}
+                </span>
               </div>
-              <p className="mt-1 truncate text-xs text-muted-foreground">{lead.snippet}</p>
-              <Badge variant="secondary" className="mt-2 font-normal">
-                {lead.category}
-              </Badge>
-            </div>
-            <span className="shrink-0 text-xs font-medium text-primary">{lead.age}</span>
-          </div>
-        ))}
+              <span className="eyebrow pt-0.5 font-medium text-signal">{lead.age}</span>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );

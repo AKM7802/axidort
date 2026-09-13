@@ -8,12 +8,12 @@ export function StepCard({
   description: string;
 }) {
   return (
-    <div className="relative flex flex-col gap-3 rounded-xl border border-border/60 bg-card p-6">
-      <span className="flex size-8 items-center justify-center rounded-full bg-primary font-heading text-sm font-semibold text-primary-foreground">
-        {step}
+    <li className="flex flex-col border-t-2 border-foreground pt-6 md:pr-10">
+      <span aria-hidden className="font-mono text-5xl leading-none tracking-tighter text-foreground/25">
+        {String(step).padStart(2, "0")}
       </span>
-      <h3 className="font-heading text-base font-medium">{title}</h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </div>
+      <h3 className="mt-8 text-xl font-semibold tracking-tight">{title}</h3>
+      <p className="mt-3 leading-relaxed text-muted-foreground">{description}</p>
+    </li>
   );
 }

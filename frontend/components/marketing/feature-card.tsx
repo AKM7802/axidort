@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export function FeatureCard({
@@ -14,31 +13,29 @@ export function FeatureCard({
   title: string;
   description: string;
   className?: string;
-  /** Flagship tile in the bento layout — a touch more visual weight. */
+  /** Flagship tile in the layout — a touch more visual weight. */
   highlighted?: boolean;
 }) {
   return (
-    <Card
-      className={cn(
-        "h-full",
-        highlighted && "border-primary/20 bg-gradient-to-br from-primary/[0.07] to-transparent",
-        className
-      )}
-    >
-      <CardHeader>
-        <div
+    <div className={cn("flex min-h-64 flex-col justify-between gap-10 bg-background p-7 sm:p-8", className)}>
+      <Icon
+        aria-hidden
+        strokeWidth={1.5}
+        className={cn("size-6", highlighted ? "text-signal" : "text-foreground/70")}
+      />
+      <div>
+        <h3
           className={cn(
-            "mb-2 flex items-center justify-center rounded-lg bg-primary/10 text-primary",
-            highlighted ? "size-11" : "size-10"
+            "font-semibold tracking-tight",
+            highlighted ? "headline text-3xl sm:text-4xl" : "text-xl",
           )}
         >
-          <Icon className="size-5" />
-        </div>
-        <CardTitle className={highlighted ? "text-lg" : "text-base"}>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
+          {title}
+        </h3>
+        <p className={cn("mt-3 leading-relaxed text-muted-foreground", highlighted && "max-w-xl")}>
+          {description}
+        </p>
+      </div>
+    </div>
   );
 }

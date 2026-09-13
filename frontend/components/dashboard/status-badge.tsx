@@ -11,5 +11,9 @@ const STATUS_CONFIG: Record<ClientStatus, { label: string; variant: "default" | 
 
 export function StatusBadge({ status }: { status: ClientStatus }) {
   const config = STATUS_CONFIG[status] ?? { label: status, variant: "outline" as const };
-  return <Badge variant={config.variant}>{config.label}</Badge>;
+  return (
+    <Badge variant={config.variant} className="eyebrow rounded-none">
+      {config.label}
+    </Badge>
+  );
 }
